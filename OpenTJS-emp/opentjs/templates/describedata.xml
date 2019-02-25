@@ -1,0 +1,69 @@
+<DataDescriptions xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="http://www.opengis.net/tjs/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    service="TJS" version="1.0" xml:lang="fr"
+    xsi:schemaLocation="http://www.opengis.net/tjs/1.0/tjsDescribeDatasets_response.xsd"
+    capabilities="{{ conf.ServiceURL }}?service=TJS&amp;request=GetCapabilities">
+    <Framework>
+        <FrameworkURI>{{ framework.frameworkuri }}</FrameworkURI>
+        <Organization/>
+        <Title>{{ framework.title }}</Title>
+        <Abstract>{{ framework.abstract }}</Abstract>
+        <ReferenceDate/>
+        <Version>1</Version>
+        <FrameworkKey>
+            {% for key in framework.frameworkkeys %}
+            <Column name="{{ key.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ key.type }}" length="{{ key.length }}"/>
+            {% endfor %}
+        </FrameworkKey>
+        <BoundingCoordinates>
+            <North>{{ framework.north }}</North>
+            <South>{{ framework.south }}</South>
+            <East>{{ framework.east }}</East>
+            <West>{{ framework.west }}</West>
+        </BoundingCoordinates>
+        <DescribeDatasetsRequest xlink:href="{{ conf.ServiceURL }}?service=TJS&amp;request=DescribeDatasets&amp;frameworkuri={{ framework.frameworkuri }}"/>
+        <Dataset>
+            <DatasetURI>{{ dataset.dataseturi }}</DatasetURI>
+            <Organization/>
+            <Title>{{ dataset.title }}</Title>
+            <Abstract>{{ dataset.abstract }}</Abstract>
+            <ReferenceDate/>
+            <Version>1</Version>
+            <Documentation/>
+            <Category>{{ dataset.category }}</Category>
+            <Displaymap>{{ dataset.display_map | default('', true)}}</Displaymap>
+            <Displaycurve>{{ dataset.display_curve | default('', true)}}</Displaycurve>
+            <Displaybar>{{ dataset.display_bar | default('', true)}}</Displaybar>
+            <Displaytab>{{ dataset.display_tab | default('', true)}}</Displaytab>
+            <Displayprint>{{ dataset.display_print | default('', true)}}</Displayprint>
+            <DescribeDataRequest xlink:href="{{ conf.ServiceURL }}?service=TJS&amp;request=DescribeData&amp;frameworkuri={{ framework.frameworkuri }}&amp;dataseturi={{ dataset.dataseturi }}"/>
+            <Columnset>
+                <FrameworkKey complete="true" relationship="one">
+                    {% for data in datas if data.isframeworkkey %}
+                        <Column name="{{ data.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ data.type }}" length="{{ data.length }}" mapmode="{{ data.map_mode }}" curves="{{ data.curves }}" bars="{{ data.bars }}" tabular="{{ data.tabular }}" brush="{{ data.brush }}" map="{{ data.map }}" jointo="{{data.jointo.name}}"/>
+                    {% endfor %}
+                </FrameworkKey>
+                <Attributes>
+                    {% for data in datas if not data.isframeworkkey %}
+                    <Column name="{{ data.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ data.type }}" length="{{ data.length }}" purpose="{{ data.purpose }}">
+                        <Title>{{ data.title }}</Title>
+                        <Abstract>{{ data.abstract }}</Abstract>
+                        <ReferenceDate/>
+                        <Version>1</Version>
+                        <Curves>{{ data.curves }}</Curves>
+                        <Bars>{{ data.bars }}</Bars>
+                        <Tabular>{{ data.tabular }}</Tabular>
+                        <Brush>{{ data.brush }}</Brush>
+                        <Map>{{ data.map }}</Map>
+                        <Mapmode>{{ data.map_mode }}</Mapmode>
+                        <Values>
+                            <{{ data.values | capitalize }}/>
+                        </Values>
+                    </Column>
+                    {% endfor %}
+                </Attributes>
+            </Columnset>
+        </Dataset>
+    </Framework>
+</DataDescriptions>

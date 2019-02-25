@@ -1,0 +1,40 @@
+<JoinAbilities xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="http://www.opengis.net/tjs/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    service="TJS" version="1.0" xml:lang="fr"
+    updateSupported="false"
+    xsi:schemaLocation="http://www.opengis.net/tjs/1.0/tjsDescribeJoinAbilities_response.xsd"
+    capabilities="{{ conf.ServiceURL }}?service=TJS&amp;request=GetCapabilities">
+<SpatialFrameworks>
+    {% for framework in frameworks %}
+    <Framework>
+        <FrameworkURI>{{ framework.frameworkuri }}</FrameworkURI>
+        <Organization/>
+        <Title>{{ framework.title }}</Title>
+        <Abstract/>
+        <ReferenceDate/>
+        <Version>1</Version>
+        <FrameworkKey>
+            {% for key in framework.frameworkkeys %}
+            <Column name="{{ key.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ key.type }}" length="{{ key.length }}"/>
+            {% endfor %}
+        </FrameworkKey>
+        <BoundingCoordinates>
+            <North>{{ framework.north }}</North>
+            <South>{{ framework.south }}</South>
+            <East>{{ framework.east }}</East>
+            <West>{{ framework.west }}</West>
+        </BoundingCoordinates>
+    </Framework>
+    {% endfor %}
+</SpatialFrameworks>
+<AttributeLimit>1</AttributeLimit>
+<OutputMechanisms>
+    <Mechanism>
+        <Identifier>geojson</Identifier>
+        <Title>GeoJSON</Title>
+        <Abstract>GeoJSON is a format for encoding a variety of geographic data structures.</Abstract>
+        <Reference>http://geojson.org/</Reference>
+    </Mechanism>
+</OutputMechanisms>
+</JoinAbilities>

@@ -1,0 +1,11 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    {{ super() }}
+    <div class="page-header">
+    <h4>{{ config.ServiceTitle }}</h4>
+    </div>
+    {% for line in config.ServiceAbstract.split('\n') %}
+    <p>{{ line }}</p>
+    {% endfor %}
+{% endblock %}

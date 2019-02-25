@@ -1,0 +1,29 @@
+<FrameworkDescriptions xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="http://www.opengis.net/tjs/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    service="TJS" version="1.0" xml:lang="fr"
+    xsi:schemaLocation="http://www.opengis.net/tjs/1.0/tjsDescribeFrameworks_response.xsd"
+    capabilities="{{ conf.ServiceURL }}?service=TJS&amp;request=GetCapabilities">
+    {% for framework in frameworks %}
+    <Framework>
+        <FrameworkURI>{{ framework.frameworkuri }}</FrameworkURI>
+        <Organization/>
+        <Title>{{ framework.title }}</Title>
+        <Abstract/>
+        <ReferenceDate/>
+        <Version>1</Version>
+        <FrameworkKey>
+            {% for key in framework.frameworkkeys %}
+            <Column name="{{ key.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ key.type }}" length="{{ key.length }}"/>
+            {% endfor %}
+        </FrameworkKey>
+        <BoundingCoordinates>
+            <North>{{ framework.north }}</North>
+            <South>{{ framework.south }}</South>
+            <East>{{ framework.east }}</East>
+            <West>{{ framework.west }}</West>
+        </BoundingCoordinates>
+        <DescribeDatasetsRequest xlink:href="{{ conf.ServiceURL }}?service=TJS&amp;request=DescribeDatasets&amp;frameworkuri={{ framework.frameworkuri }}"/>
+    </Framework>
+    {% endfor %}
+</FrameworkDescriptions>

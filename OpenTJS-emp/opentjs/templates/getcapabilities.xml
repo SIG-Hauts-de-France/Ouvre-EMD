@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tjs:Capabilities version="1.0" service="TJS"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.opengis.net/tjs/1.0/tjsGetCapabilities_response.xsd"
+    xml:lang="en" xmlns:tjs="http://www.opengis.net/tjs/1.0"
+    xmlns="http://www.opengis.net/ows/1.1"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ServiceIdentification>
+        <Title>{{ conf.ServiceTitle }}</Title>
+        <Abstract>{{ conf.ServiceTitle }}</Abstract>
+        <Keywords>
+            <Keyword>TJS</Keyword>
+            <Keyword>GDAS</Keyword>
+        </Keywords>
+        <ServiceType>TJS</ServiceType>
+        <ServiceTypeVersion>1.0.0</ServiceTypeVersion>
+        <Fees>none</Fees>
+        <AccessConstraints>none</AccessConstraints>
+    </ServiceIdentification>
+    <ServiceProvider>
+    <ProviderName>{{ conf.ServiceTitle }}</ProviderName>
+    <ProviderSite xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{conf.ServiceURL}}?"/>
+    <ServiceContact/>
+    </ServiceProvider>
+    <OperationsMetadata>
+        <Operation name="GetCapabilities">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        {% if conf.IsDataAccess %}
+        <Operation name="DescribeFrameworks">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        <Operation name="DescribeDatasets">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        <Operation name="DescribeData">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        <Operation name="GetData">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+            <Constraint name="GeolinkidsLimit">
+                <AllowedValues>
+                    <Range>
+                        <MaximumValue>{{conf.GetDataGeolinkidsLimit}}</MaximumValue>
+                    </Range>
+                </AllowedValues>
+                <Meaning>The maximum number of Keys that can be included in the
+                    LinkageKeys element of a GetData request.</Meaning>
+            </Constraint>
+            <Constraint name="AttributeLimit">
+                <AllowedValues>
+                    <Range>
+                        <MaximumValue>{{conf.GetDataAttributeLimit}}</MaximumValue>
+                    </Range>
+                </AllowedValues>
+                <Meaning>The maximum number of Attributes that can be included
+                    as part of one GetData request.</Meaning>
+            </Constraint>
+        </Operation>
+        {% endif %}
+        {% if conf.IsDataJoining %}
+        <Operation name="DescribeJoinAbilities">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        <Operation name="DescribeKey">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+        </Operation>
+        <Operation name="JoinData">
+            <DCP>
+                <HTTP>
+                    <Get xlink:href="{{conf.ServiceURL}}?" />
+                </HTTP>
+            </DCP>
+            <Constraint name="AttributeLimit">
+                <AllowedValues>
+                    <Range>
+                        <MaximumValue>{{conf.JoinDataAttributeLimit}}</MaximumValue>
+                    </Range>
+                </AllowedValues>
+                <Meaning>The maximum number of Attributes that can be included
+                    as part of one JoinData request.</Meaning>
+            </Constraint>
+        </Operation>
+        {% endif %}
+    </OperationsMetadata>
+    <tjs:Languages>
+        <Language>{{conf.ServiceLanguage}}</Language>
+    </tjs:Languages>
+</tjs:Capabilities>

@@ -1,0 +1,49 @@
+<DatasetDescriptions xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns="http://www.opengis.net/tjs/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    service="TJS" version="1.0" xml:lang="fr"
+    xsi:schemaLocation="http://www.opengis.net/tjs/1.0/tjsDescribeDatasets_response.xsd"
+    capabilities="{{ conf.ServiceURL }}?service=tjs&amp;request=GetCapabilities">
+    {% for framework in frameworks %}
+    <Framework>
+        <FrameworkURI>{{ framework.frameworkuri }}</FrameworkURI>
+        <Organization/>
+        <Title>{{ framework.title }}</Title>
+        <Abstract>{{ framework.abstract }}</Abstract>
+        <ReferenceDate/>
+        <Version>1</Version>
+        <FrameworkKey>
+            {% for key in framework.frameworkkeys %}
+            <Column name="{{ key.name }}" type="http://www.w3.org/TR/xmlschema-2/#{{ key.type }}" length="{{ key.length }}"/>
+            {% endfor %}
+        </FrameworkKey>
+        <BoundingCoordinates>
+            <North>{{ framework.north }}</North>
+            <South>{{ framework.south }}</South>
+            <East>{{ framework.east }}</East>
+            <West>{{ framework.west }}</West>
+        </BoundingCoordinates>
+        <DescribeDatasetsRequest xlink:href="{{ conf.ServiceURL }}?service=tjs&amp;request=DescribeDatasets&amp;frameworkuri={{ framework.frameworkuri }}"/>
+        {% for dataset in framework.datasets.all() | sort(attribute='title') %}
+            <Dataset>
+                <DatasetURI>{{ dataset.dataseturi }}</DatasetURI>
+                <Organization/>
+                <Title>{{ dataset.title }}</Title>
+                <Abstract>{{ dataset.abstract }}</Abstract>
+                <ReferenceDate/>
+                <Version>1</Version>
+                <Documentation/>
+                {% if conf.ALLOW_EXTENSIONS %}
+                <Category>{{ dataset.category }}</Category>
+                <Displaymap>{{ dataset.display_map | default('', true) }}</Displaymap>
+                <Displaycurve>{{ dataset.display_curve | default('', true)}}</Displaycurve>
+                <Displaybar>{{ dataset.display_bar | default('', true)}}</Displaybar>
+                <Displaytab>{{ dataset.display_tab | default('', true)}}</Displaytab>
+                <Displayprint>{{ dataset.display_print | default('', true)}}</Displayprint>
+                {% endif %}
+                <DescribeDataRequest xlink:href="{{ conf.ServiceURL }}?service=tjs&amp;request=DescribeData&amp;frameworkuri={{ framework.frameworkuri }}&amp;dataseturi={{ dataset.dataseturi }}"/>
+            </Dataset>
+        {% endfor %}
+    </Framework>
+    {% endfor %}
+</DatasetDescriptions>
