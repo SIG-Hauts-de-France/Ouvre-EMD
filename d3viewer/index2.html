@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>D3 Data Viewer</title>
+    <script src="lib/d3.v3.min.js" charset="utf-8"></script>
+    <script src="lib/queue.v1.min.js"></script>
+    <script src="lib/colorbrewer.js"></script> 
+    
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="lib/nv.d3.css">
+    <link rel="stylesheet" href="css/d3viewer.css">
+    <link rel="stylesheet" href="css/d3viewer_compact.css">
+    
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300,600&amp;v2" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">    
+ 
+    <script src="lib/jquery/jquery-1.10.2.js"></script>
+    <script src="lib/jquery/jquery-ui.js"></script>    
+    <script src="lib/nv.d3.js"></script>
+    <script src="lib/bootstrap-3.3.4/js/bootstrap.min.js"></script>    
+    <script src="lib/i18next-1.8.0/i18next-1.8.0.min.js"></script>  
+    <script src="js/d3viewer.js"></script> 
+    <script src="js/d3viewer-settings.js"></script> 
+    <script src="js/d3viewer-utils.js"></script> 
+    <script src="js/d3viewer-main2.js"></script>
+    <script src="js/d3viewer-map.js"></script>
+    <script src="js/d3viewer-overviewmap.js"></script>
+    <script src="js/d3viewer-curve.js"></script>
+    <script src="js/d3viewer-brush.js"></script> 
+    <script src="js/d3viewer-bar.js"></script>
+    <script src="js/d3viewer-tabular.js"></script> 
+</head>
+<body>
+    <div class="container bs-docs-container">
+        <div class="row">
+            <div class="col-md-9" role="main">
+                <div class="charts-section">
+                    <h1 id="resizable_top"><span class="lighter">EMP</span> <span class="" data-i18n="global.main_title"></span></h1>
+                    <p data-i18n="global.main_desc"></p>
+                    <div id="animated_title"></div>
+
+                    
+                    <div id="viewer">
+
+                        <nav class="menu-sidebar hidden-print hidden-xs hidden-sm">
+                            <ul class="nav bs-docs-sidenav">
+                                <li>
+                                    <div id="menu_map" class="menu_icon"></div>
+                                </li>
+                                <li>
+                                    <div id="menu_curve" class="menu_icon"></div>
+                                </li>     
+                                <li>
+                                    <div id="menu_tab" class="menu_icon"></div>
+                                </li>                        
+                                <li>
+                                    <div id="menu_bar" class="menu_icon"></div>
+                                </li>
+                                <li>
+                                    <a data-i18n="global.multi_view" href="index.html"></a>
+                                </li>                                  
+                            </ul>
+                        </nav>    
+                        <select id="data_list"></select>                        
+                    
+                        <div id="resizable_map" class="block-container viewer_part">
+                            <h3 class="block_title" ></h3>
+                        </div>                  
+                        <div id="resizable_curve" class="block-container viewer_part">
+                            <h3 class="block_title" data-i18n="chart.curves">Curve</h3>
+                        </div> 
+                        <div id="resizable_tab" class="block-container viewer_part">
+                            <h3 class="block_title" data-i18n="chart.tabular">Tabular</h3>
+                            <div id="resizable_tabular"></div>
+                        </div>                
+                        <div id="resizable_bar" class="block-container viewer_part">
+                            <h3 class="block_title" data-i18n="chart.chart">Chart</h3>
+                        </div>
+                        <div id="resizable_filter" class="block-container">
+                            <h3 class="block_title" data-i18n="chart.slider">Time slider</h3>
+                        </div>                        
+                    </div>
+                        
+                    <h2 id="resizable_help" data-i18n="global.help"></h2>
+                    <div class="block-container">
+                        Sed malesuada enim ut sapien imperdiet pulvinar. Integer nec enim a nisi semper varius et id turpis. Nulla lobortis hendrerit ligula, a condimentum mauris dapibus vitae. Nunc laoreet gravida nisl ac eleifend. Cras ac nibh interdum, congue turpis a, congue ipsum. Mauris non posuere diam. Proin eu quam mi.
+                    </div>
+                    
+                    <h2 id="resizable_about" data-i18n="global.about"></h2>
+                    <div class="block-container">
+                        Duis mattis euismod felis ut pulvinar. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce quis urna ante. Donec finibus placerat molestie. Quisque euismod lobortis vestibulum. Fusce tincidunt vestibulum urna, sit amet facilisis eros iaculis eget. Mauris ultrices non velit sed dapibus. Sed ac risus aliquam, molestie arcu at, pellentesque augue.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 menu" role="menu">
+                <div id="data_selector" class="block-container">
+                    <h3 data-i18n="filters.zone"></h3>
+                    <div id="mini_map"></div>                 
+                </div>            
+            </div>
+        </div>
+    </div>
+
+    <div id="divSplashScreen">
+        <div id="container">
+            <p class="title">Avertissement</p>
+            <p class="content">Ce site est en cours de développement.</p>
+        </div>
+    </div>
+
+    <footer class="bs-docs-footer" role="contentinfo">
+        <div class="back-to-top" id="menu_top"></div>
+        <div class="container">
+            <p><span data-i18n="global.copyright"></span> - 2015</p>
+        </div>
+    </footer>
+    
+</body>
+</html>
