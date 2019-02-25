@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Outil de visualisation des résultats de l'Enquête sur les Grands Mobiles Picards (2014)</title>
+    <script src="lib/d3.v3.min.js" charset="utf-8"></script>
+    <script src="lib/queue.v1.min.js"></script>
+    <script src="lib/colorbrewer.js"></script> 
+    
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="lib/nv.d3.css">
+    <link rel="stylesheet" href="css/d3viewer.css">
+    <link rel="stylesheet" href="css/d3viewer_compact.css">
+    <link rel="stylesheet" href="lib/tablesorter/themes/blue/style.css" type="text/css" />
+    
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,600|Open+Sans+Condensed:300,600&amp;v2" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">    
+ 
+    <script src="lib/jquery/jquery-1.10.2.js"></script>
+    <script src="lib/jquery/jquery-ui.js"></script>
+    <script src="lib/tablesorter/jquery.tablesorter.min.js"></script>
+    <script src="lib/nv.d3.js"></script>
+    <script src="lib/bootstrap-3.3.4/js/bootstrap.min.js"></script>    
+    <script src="lib/i18next-1.8.0/i18next-1.8.0.min.js"></script>  
+    <script src="js/d3viewer.js"></script> 
+    <script src="js/d3viewer-settings.js"></script> 
+    <script src="js/d3viewer-utils.js"></script> 
+    <script src="js/d3viewer-dataset-tjs.js"></script> 
+    <script src="js/d3viewer-main.js"></script>
+    <script src="js/d3viewer-map.js"></script>
+    <script src="js/d3viewer-overviewmap.js"></script>
+    <script src="js/d3viewer-curve.js"></script>
+    <script src="js/d3viewer-brush.js"></script> 
+    <script src="js/d3viewer-bar.js"></script>
+    <script src="js/d3viewer-tabular.js"></script> 
+</head>
+<body>
+    <header>
+        <div class="container bs-docs-container">
+            <div class="row">
+                <div class="col-md-9" role="main">
+                    <div class="charts-section">
+                        <div class="col-md-2 logo">
+                            <img src="img/logo_region.jpg" alt="logo" >
+                        </div>
+                        <div class="col-md-10 title">
+                            <h1 id="resizable_top"><span class="lighter"></span> <span class="" data-i18n="global.main_title">Outil de visualisation des résultats de l'Enquête sur les Grands Mobiles Picards (2014)</span></h1>
+                            <div id="animated_title"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="sub_header"></div>
+
+    <div class="container bs-docs-container">
+        <div class="row">
+            <div class="col-md-9" role="main">
+                <div class="charts-section">
+                    <div id="viewer">
+                        <nav class="menu-sidebar hidden-print hidden-xs hidden-sm">
+                            <ul class="nav bs-docs-sidenav"></ul>
+                        </nav>
+
+                        <div class="print_specific">
+                            <div id="title_print"></div>
+                        </div>
+
+                        <div id="resizable_map" class="block-container viewer_part">
+                            <h3 class="block_title" ></h3>
+                        </div>
+                        <div id="resizable_curve" class="block-container viewer_part">
+                            <h3 class="block_title" ></h3>
+                        </div> 
+                        <div id="resizable_tab" class="block-container viewer_part">
+                            <h3 class="block_title" ></h3>
+                        </div>
+                        <div id="resizable_bar" class="block-container viewer_part">
+                            <h3 class="block_title" ></h3>
+                        </div>
+                    </div>
+
+                    <div class="block-container about ">
+                        <div class="col-md-6">
+                            <h2 id="resizable_help" data-i18n="global.help"></h2>
+                            <p>Avant toute exploitation des résultats affichés à l’écran, rappelez-vous que nous n’avons interrogé que des « grands mobiles » Picards. Ceux-ci représentent 32 % de la population Picarde de plus de 11 ans (soit environ 530 000 picards).
+                            Les résultats sur les déplacements reflètent un jour moyen de semaine 2014 (hors jours fériés, week-end et vacances).
+                            L'échantillon d'enquête a été redressé pour disposer d'une photographie globale des déplacements réalisés par l'ensemble des grands mobiles Picards.</p>
+                            <div class="help_map">
+                                <h2>Aide contextuelle carte</h2>
+                                <ul>
+                                    <li>Les légendes de la carte sont cliquables pour afficher ou masquer les informations.</li>
+                                    <li>Sur certaines cartes, 2 modes de visualisation sont possibles.</li>
+                                    <li>Des pop-up s'affichent au survol des objets sur la carte.</li>
+                                </ul>
+                            </div>
+                            <div class="help_bars">
+                                <h2>Aide contextuelle graphique</h2>
+                                <ul>
+                                    <li>Les légendes des graphiques sont cliquables pour afficher ou masquer les informations.</li>
+                                    <li>Sur certains graphiques des filtres peuvent être activés pour visualiser les données ainsi filtrées.</li>
+                                    <li>Vous pouvez intervertir les variables dans les listes à droite (abscisse/filtre/sous-filtre) pour changer la représentation.</li>
+                                </ul>
+                            </div>
+                            <div class="help_tabular">
+                                <h2>Aide contextuelle tableau</h2>
+                                <ul>
+                                    <li>Il est possible de trier le tableau en cliquant sur la colonne souhaitée.</li>
+                                    <li>La taille de la barre colorée dans chaque cellule du tableau est proportionnelle à la valeur numérique de la cellule.</li>
+                                    <li>Un export du tableau au format .CSV est possible. Dans ce cas, la précision des valeurs est également fournies.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="help_precision">
+                                <h2>Précision des résultats</h2>
+                                <p>
+                                L'enquête ayant été réalisée auprès d'un échantillon d'individus, chaque résultat est affecté d'une certaine précision (exemple : 120 km +/- 25% signifie que la vraie valeur est plutôt comprise entre 90 et 150 km).<br/>
+                                La précision est visible en général dans les pop-up au survol des objets graphiques et est fournie dans les exports .csv des tableaux résultats.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h2 id="resizable_about" data-i18n="global.about"></h2>
+                            <p>Entre le 15 octobre 2013 et le 24 juin 2014, la Région Picardie, accompagnée par l’Europe (FEDER), l’Etat, l’ADEME et le Syndicat Mixte des Transports Collectifs de l’Oise (SMTCO) a mené une enquête de type « ménages déplacements » à l’échelle de son territoire.  Cette enquête a été réalisée par la société TEST SA, sous la conduite du CEREMA Nord-Picardie.</p>
+                            <p>Le principe est d’enquêter un échantillon représentatif de la population (ici 14 500 Picards) sur ses déplacements réalisés la veille : motif, durée, mode utilisé, etc. Les données ont été collectées sur un jour moyen de semaine. La spécificité Picarde porte sur la sélection des personnes enquêtées : en effet, seules celles s’étant déplacées à plus de 10 km de leur domicile la veille de l’enquête ont été interrogées. Pour les résidents des périmètres de transports urbains (PTU), cette destination lointaine devait en plus se situer en dehors du PTU. Ainsi, l’objectif était de cibler des Picards ayant une mobilité d’échelle départementale ou régionale (c’est-à-dire les déplacements pour lesquels la Région Picardie et les Départements peuvent proposer une alternative à la voiture individuelle).</p>
+                            <p>Cet outil a été réalisé par la société Oslandia en collaboration avec le Cerema Nord Picardie. Il est en téléchargement libre selon le souhait de la Région Picardie.</p>
+                            <p>Contact: grands-mobiles@cr-picardie.fr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 menu" role="menu">
+                <div id="data_selector" class="block-container">
+                    <div id="abstract"></div>
+                    <hr/>
+                    <div class="map_specific">
+                        <div id="mini_map"></div>
+                        <div id="map_zone_selector"></div>
+                        <div id="map_color_picker"></div>
+                        <div id="map_scale"></div>
+                    </div>
+                    <div id="filter_selector"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pre_footer"></div>
+    <footer class="bs-docs-footer" role="contentinfo">
+        <div class="back-to-top" id="menu_top"></div>
+        <div class="container">
+            <p><span></span>Réalisation: Oslandia et Cerema Nord Picardie pour la région Picardie - Oct. 2015</p>
+            <p class="left">
+                <img src="img/ADEME.jpg" alt="Ademe"/>
+                <img src="img/DREAL_Picardie.jpg" alt="Dreal Picardie"/>
+                <img src="img/europe_FEDER.jpg" alt="Europe Feder"/>
+                <img src="img/SMTCO.jpg" alt="SMTCO"/>
+            </p>
+            <p class="right">
+                <a href="http://www.oslandia.com"><img src="img/logo_oslandia.jpg" alt="Oslandia"/></a>
+                <a href="http://www.nord-picardie.cerema.fr"><img src="img/logo_cerema.jpg" alt="Cerema"/></a>
+            </p>
+        </div>
+    </footer>
+
+<!-- Modal (loading) -->
+<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div id="loading_container">
+            <div id="loading">
+                <button class="btn btn-lg bg-warning btn-full"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> <label data-i18n="global.loading">Chargement...</label></button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+</body>
+</html>
